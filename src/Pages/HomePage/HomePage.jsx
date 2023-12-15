@@ -19,7 +19,7 @@ export default function HomePage() {
     <Container mt={8}>
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         <Heading as="h1" size="lg">
-          Contact List Application
+          Contact App
         </Heading>
         <Button
           as="h3"

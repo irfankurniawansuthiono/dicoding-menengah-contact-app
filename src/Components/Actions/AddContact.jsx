@@ -13,6 +13,7 @@ import {
   ModalOverlay,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -42,7 +43,12 @@ export default function AddContact() {
           Add
         </Button>
       </Flex>
-      <Modal initialFocusRef={nameRef} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        initialFocusRef={nameRef}
+        closeOnOverlayClick={false}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add a contact</ModalHeader>
@@ -106,12 +112,15 @@ export default function AddContact() {
             }) => (
               <>
                 <ModalBody pb={6}>
-                  <FormControl>
+                  <FormControl
+                    isRequired
+                    isInvalid={errors.name && touched.name}
+                  >
                     {errors.name && touched.name ? (
                       <>
                         <Flex justifyContent={"space-between"}>
                           <FormLabel>Name</FormLabel>
-                          <Text color="red.500">{errors.name}</Text>
+                          <Text color={"red.500"}>{errors.name}</Text>
                         </Flex>
                         <Input
                           name={"name"}
@@ -137,12 +146,16 @@ export default function AddContact() {
                     )}
                   </FormControl>
 
-                  <FormControl mt={4}>
+                  <FormControl
+                    mt={4}
+                    isRequired
+                    isInvalid={errors.name && touched.name}
+                  >
                     {errors.tag && touched.tag ? (
                       <>
                         <Flex justifyContent={"space-between"}>
                           <FormLabel>Instagram</FormLabel>
-                          <Text color="red.500">{errors.tag}</Text>
+                          <Text color={"red.500"}>{errors.tag}</Text>
                         </Flex>
                         <InputGroup>
                           <InputLeftAddon pointerEvents={"none"}>
@@ -179,12 +192,16 @@ export default function AddContact() {
                       </>
                     )}
                   </FormControl>
-                  <FormControl mt={4}>
+                  <FormControl
+                    mt={4}
+                    isRequired
+                    isInvalid={errors.name && touched.name}
+                  >
                     {errors.email && touched.email ? (
                       <>
                         <Flex justifyContent={"space-between"}>
                           <FormLabel>Email</FormLabel>
-                          <Text color="red.500">{errors.email}</Text>
+                          <Text color={"red.500"}>{errors.email}</Text>
                         </Flex>
 
                         <Input
@@ -210,12 +227,16 @@ export default function AddContact() {
                       </>
                     )}
                   </FormControl>
-                  <FormControl mt={4}>
+                  <FormControl
+                    mt={4}
+                    isRequired
+                    isInvalid={errors.name && touched.name}
+                  >
                     {errors.phoneNumber && touched.phoneNumber ? (
                       <>
                         <Flex justifyContent={"space-between"}>
                           <FormLabel>Phone Number</FormLabel>
-                          <Text color="red.500">{errors.phoneNumber}</Text>
+                          <Text color={"red.500"}>{errors.phoneNumber}</Text>
                         </Flex>
                         <Input
                           name={"phoneNumber"}
@@ -229,14 +250,17 @@ export default function AddContact() {
                         />
                       </>
                     ) : (
-                      <Input
-                        name={"phoneNumber"}
-                        type={"tel"}
-                        placeholder="Enter the Phone Number (eg. 08123456789)"
-                        value={values.phoneNumber}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
+                      <>
+                        <FormLabel>Phone Number</FormLabel>
+                        <Input
+                          name={"phoneNumber"}
+                          type={"tel"}
+                          placeholder="Enter the Phone Number (eg. 08123456789)"
+                          value={values.phoneNumber}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                      </>
                     )}
                   </FormControl>
                 </ModalBody>

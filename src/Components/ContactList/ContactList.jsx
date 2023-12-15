@@ -5,15 +5,15 @@ import { getContacts } from "../../api/api";
 
 export default function ContactList({ q }) {
   const [contacts, setContacts] = useState([]);
-
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         const contactsDBValue = await getContacts();
         setContacts(contactsDBValue.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching contacts:", error);
-        // Handle the error appropriately (e.g., show an error message)
       }
     };
 
@@ -26,7 +26,9 @@ export default function ContactList({ q }) {
       )
     : contacts;
 
-  return filteredContacts.length > 0 ? (
+  return isLoading ? (
+    <Text>Loading...</Text>
+  ) : filteredContacts.length > 0 ? (
     filteredContacts.map((contact) => (
       <ContactCard key={contact.id} {...contact} />
     ))
