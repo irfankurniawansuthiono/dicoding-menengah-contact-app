@@ -23,9 +23,10 @@ import { useRef, useState } from "react";
 import { addContact as add } from "../../api/api";
 import { IoAddOutline } from "react-icons/io5";
 import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
 export default function AddContact() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const navigate = useNavigate();
   const nameRef = useRef(null);
   return (
     <>
@@ -64,16 +65,14 @@ export default function AddContact() {
               }
               if (!values.email) {
                 errors.email = "Required for email";
-              }
-              if (!values.phoneNumber) {
-                errors.phoneNumber = "Required for phone number";
-              }
-              if (
+              } else if (
                 !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
               ) {
                 errors.email = "Invalid email address";
               }
-              if (!/^[0-9]+$/.test(values.phoneNumber)) {
+              if (!values.phoneNumber) {
+                errors.phoneNumber = "Required for phone number";
+              } else if (!/^[0-9]+$/.test(values.phoneNumber)) {
                 errors.phoneNumber = "Invalid phone number";
               }
 
@@ -116,152 +115,76 @@ export default function AddContact() {
                     isRequired
                     isInvalid={errors.name && touched.name}
                   >
-                    {errors.name && touched.name ? (
-                      <>
-                        <Flex justifyContent={"space-between"}>
-                          <FormLabel>Name</FormLabel>
-                          <Text color={"red.500"}>{errors.name}</Text>
-                        </Flex>
-                        <Input
-                          name={"name"}
-                          borderColor="red.500"
-                          placeholder="Enter Name"
-                          _placeholder={{ color: "red.500", opacity: 0.8 }}
-                          value={values.name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <FormLabel>Name</FormLabel>
-                        <Input
-                          name={"name"}
-                          placeholder="Name"
-                          value={values.name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    )}
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Name</FormLabel>
+                      <FormErrorMessage color={"red.500"}>
+                        {errors.name}
+                      </FormErrorMessage>
+                    </Flex>
+                    <Input
+                      name={"name"}
+                      placeholder="Enter Name"
+                      value={values.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
                   </FormControl>
 
                   <FormControl
                     mt={4}
                     isRequired
-                    isInvalid={errors.name && touched.name}
+                    isInvalid={errors.tag && touched.tag}
                   >
-                    {errors.tag && touched.tag ? (
-                      <>
-                        <Flex justifyContent={"space-between"}>
-                          <FormLabel>Instagram</FormLabel>
-                          <Text color={"red.500"}>{errors.tag}</Text>
-                        </Flex>
-                        <InputGroup>
-                          <InputLeftAddon pointerEvents={"none"}>
-                            @
-                          </InputLeftAddon>
-                          <Input
-                            value={values.tag}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            name={"tag"}
-                            placeholder={
-                              "Enter Instagram without @ (eg. instagram)"
-                            }
-                            _placeholder={{ color: "red.500", opacity: 0.8 }}
-                            borderColor={"red.500"}
-                          />
-                        </InputGroup>
-                      </>
-                    ) : (
-                      <>
-                        <FormLabel>Instagram</FormLabel>
-                        <InputGroup>
-                          <InputLeftAddon pointerEvents={"none"}>
-                            @
-                          </InputLeftAddon>
-                          <Input
-                            name={"tag"}
-                            placeholder="Enter Instagram without @ (eg. instagram)"
-                            value={values.tag}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                        </InputGroup>
-                      </>
-                    )}
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Instagram</FormLabel>
+                      <FormErrorMessage> {errors.tag} </FormErrorMessage>
+                    </Flex>
+                    <InputGroup>
+                      <InputLeftAddon pointerEvents={"none"}>@</InputLeftAddon>
+                      <Input
+                        name={"tag"}
+                        placeholder="Enter Instagram without @ (eg. instagram)"
+                        value={values.tag}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    </InputGroup>
                   </FormControl>
                   <FormControl
                     mt={4}
                     isRequired
-                    isInvalid={errors.name && touched.name}
+                    isInvalid={errors.email && touched.email}
                   >
-                    {errors.email && touched.email ? (
-                      <>
-                        <Flex justifyContent={"space-between"}>
-                          <FormLabel>Email</FormLabel>
-                          <Text color={"red.500"}>{errors.email}</Text>
-                        </Flex>
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Email</FormLabel>
+                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    </Flex>
 
-                        <Input
-                          name={"email"}
-                          placeholder={"enter a valid email address"}
-                          _placeholder={{ color: "red.500", opacity: 0.8 }}
-                          borderColor={"red.500"}
-                          value={values.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <FormLabel>Email</FormLabel>
-                        <Input
-                          name={"email"}
-                          placeholder="email@example.com"
-                          value={values.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    )}
+                    <Input
+                      name={"email"}
+                      placeholder={"enter email address"}
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
                   </FormControl>
                   <FormControl
                     mt={4}
                     isRequired
-                    isInvalid={errors.name && touched.name}
+                    isInvalid={errors.phoneNumber && touched.phoneNumber}
                   >
-                    {errors.phoneNumber && touched.phoneNumber ? (
-                      <>
-                        <Flex justifyContent={"space-between"}>
-                          <FormLabel>Phone Number</FormLabel>
-                          <Text color={"red.500"}>{errors.phoneNumber}</Text>
-                        </Flex>
-                        <Input
-                          name={"phoneNumber"}
-                          type={"tel"}
-                          placeholder={"only numbers are allowed"}
-                          _placeholder={{ color: "red.500", opacity: 0.8 }}
-                          borderColor={"red.500"}
-                          value={values.phoneNumber}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <FormLabel>Phone Number</FormLabel>
-                        <Input
-                          name={"phoneNumber"}
-                          type={"tel"}
-                          placeholder="Enter the Phone Number (eg. 08123456789)"
-                          value={values.phoneNumber}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </>
-                    )}
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
+                    </Flex>
+                    <Input
+                      name={"phoneNumber"}
+                      type={"tel"}
+                      placeholder={"enter phone number"}
+                      value={values.phoneNumber}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
                   </FormControl>
                 </ModalBody>
                 <ModalFooter>

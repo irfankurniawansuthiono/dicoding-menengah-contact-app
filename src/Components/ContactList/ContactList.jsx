@@ -10,8 +10,12 @@ export default function ContactList({ q }) {
     const fetchContacts = async () => {
       try {
         const contactsDBValue = await getContacts();
-        setContacts(contactsDBValue.data);
-        setLoading(false);
+        if (contacts === contactsDBValue.data) {
+          return;
+        } else {
+          setContacts(contactsDBValue.data);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching contacts:", error);
       }
@@ -20,11 +24,12 @@ export default function ContactList({ q }) {
     fetchContacts();
   });
 
-  const filteredContacts = q
+  const filteredData = q
     ? contacts.filter((contact) =>
         contact.name.toLowerCase().includes(q.toLowerCase())
       )
-    : contacts;
+    : null;
+  const filteredContacts = q ? (filteredData ? filteredData : null) : contacts;
 
   return isLoading ? (
     <Text>Loading...</Text>

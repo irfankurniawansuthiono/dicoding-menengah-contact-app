@@ -4,7 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
+  FormErrorMessage,
   Stack,
   Button,
   Heading,
@@ -40,6 +40,12 @@ export default function SignUpPage() {
               initialValues={{ name: "", email: "", password: "" }}
               validate={(values) => {
                 const errors = {};
+                if (!values.name) {
+                  errors.name = "Required";
+                }
+                if (!values.password) {
+                  errors.password = "Required";
+                }
                 if (!values.email) {
                   errors.email = "Required";
                 } else if (
@@ -65,8 +71,14 @@ export default function SignUpPage() {
                 isSubmitting,
               }) => (
                 <form onSubmit={handleSubmit}>
-                  <FormControl id="name">
-                    <FormLabel>Name </FormLabel>
+                  <FormControl
+                    id="name"
+                    isInvalid={errors.name && touched.name}
+                  >
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Name </FormLabel>
+                      <FormErrorMessage>{errors.name}</FormErrorMessage>
+                    </Flex>
                     <Input
                       type="text"
                       name="name"
@@ -75,8 +87,14 @@ export default function SignUpPage() {
                       onBlur={handleBlur}
                     />
                   </FormControl>
-                  <FormControl id="email">
-                    <FormLabel>Email address</FormLabel>
+                  <FormControl
+                    id="email"
+                    isInvalid={errors.email && touched.email}
+                  >
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Email address</FormLabel>
+                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    </Flex>
                     <Input
                       type="email"
                       name="email"
@@ -84,10 +102,15 @@ export default function SignUpPage() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.email && touched.email && errors.email}
                   </FormControl>
-                  <FormControl id="password">
-                    <FormLabel>Password</FormLabel>
+                  <FormControl
+                    id="password"
+                    isInvalid={errors.password && touched.password}
+                  >
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Password</FormLabel>
+                      <FormErrorMessage>{errors.password}</FormErrorMessage>
+                    </Flex>
                     <Input
                       type="password"
                       name="password"
@@ -95,7 +118,6 @@ export default function SignUpPage() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.password && touched.password && errors.password}
                   </FormControl>
                   <Stack spacing={10} mt={5}>
                     <Button

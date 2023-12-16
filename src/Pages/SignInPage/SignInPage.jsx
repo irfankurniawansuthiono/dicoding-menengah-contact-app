@@ -7,18 +7,25 @@ import {
   Checkbox,
   Stack,
   Button,
+  FormErrorMessage,
   Heading,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import { login } from "../../api/api";
+import { getAccessToken, login } from "../../api/api";
 import { Link } from "react-router-dom";
 import { putAccessToken } from "../../api/api";
+import { useEffect } from "react";
 export default function SignInPage() {
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const token = getAccessToken();
+    if (token) {
+      navigate("/contacts");
+    }
+  });
   return (
     <Flex
       minH={"100vh"}
@@ -47,6 +54,9 @@ export default function SignInPage() {
                   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                 ) {
                   errors.email = "Invalid email address";
+                }
+                if (!values.password) {
+                  errors.password = "Required";
                 }
                 return errors;
               }}
@@ -80,19 +90,26 @@ export default function SignInPage() {
                 isSubmitting,
               }) => (
                 <form onSubmit={handleSubmit}>
-                  <FormControl id="email">
-                    <FormLabel>Email address</FormLabel>
-                    <Input
-                      type="email"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    {errors.email && touched.email && errors.email}
-                  </FormControl>
-                  <FormControl id="password">
-                    <FormLabel>Password</FormLabel>
+                  <>
+                    <FormControl id="email" isInvalid={errors.email}>
+                      <Flex justifyContent={"space-between"}>
+                        <FormLabel>Email address</FormLabel>
+                        <FormErrorMessage>{errors.email}</FormErrorMessage>
+                      </Flex>
+                      <Input
+                        type="email"
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    </FormControl>
+                  </>
+                  <FormControl id="password" isInvalid={errors.password}>
+                    <Flex justifyContent={"space-between"}>
+                      <FormLabel>Password</FormLabel>
+                      <FormErrorMessage>{errors.password}</FormErrorMessage>
+                    </Flex>
                     <Input
                       type="password"
                       name="password"
@@ -100,7 +117,6 @@ export default function SignInPage() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
-                    {errors.password && touched.password && errors.password}
                   </FormControl>
                   <Stack spacing={10} mt={5}>
                     <Button
