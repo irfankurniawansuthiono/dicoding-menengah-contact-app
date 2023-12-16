@@ -1,26 +1,21 @@
 import ContactCard from "./ContactCard";
 import { Text } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getContacts } from "../../api/api";
 
 export default function ContactList({ q }) {
   const [contacts, setContacts] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const fetchContacts = useCallback(async () => {
+    try {
+      const contactsDBValue = await getContacts();
+      setContacts(contactsDBValue.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+    }
+  });
   useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const contactsDBValue = await getContacts();
-        if (contacts === contactsDBValue.data) {
-          return;
-        } else {
-          setContacts(contactsDBValue.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-      }
-    };
-
     fetchContacts();
   });
 
@@ -35,7 +30,11 @@ export default function ContactList({ q }) {
     <Text>Loading...</Text>
   ) : filteredContacts.length > 0 ? (
     filteredContacts.map((contact) => (
-      <ContactCard key={contact.id} {...contact} />
+      <ContactCard
+        onRefetch={() => fetchContacts()}
+        key={contact.id}
+        {...contact}
+      />
     ))
   ) : (
     <Text>No Contacts found in Database</Text>

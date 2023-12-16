@@ -9,8 +9,10 @@ import {
   Avatar,
   Button,
 } from "@chakra-ui/react";
-import { IoPersonRemove } from "react-icons/io5";
-import { deleteContact } from "../../api/api";
+import DeleteButton from "../Button/DeleteButton";
+import { MdPermIdentity, MdEmail } from "react-icons/md";
+import { AiFillInstagram } from "react-icons/ai";
+import { FaPhone } from "react-icons/fa6";
 export default function ContactCard({
   email,
   id,
@@ -20,7 +22,7 @@ export default function ContactCard({
   tag,
 }) {
   return (
-    <Center py={6}>
+    <Center py={2}>
       <Box
         maxW={"445px"}
         w={"full"}
@@ -28,7 +30,7 @@ export default function ContactCard({
         bg={useColorModeValue("white", "gray.900")}
         boxShadow={"2xl"}
         rounded={"md"}
-        p={6}
+        p={3}
         overflow={"hidden"}
       >
         <Flex
@@ -38,23 +40,32 @@ export default function ContactCard({
           justifyContent={"space-between"}
         >
           <Stack direction={"row"} spacing={4} align={"center"}>
-            <Avatar size={"lg"} name={name} src={imageUrl} />
+            <Avatar
+              size={{ base: "md", md: "lg" }}
+              name={name}
+              src={imageUrl}
+            />
             <Stack direction={"column"} spacing={0} fontSize={"sm"}>
-              <Text fontWeight={600}>Nama : {name}</Text>
-              <Text color={"gray.500"}>Instagram : {tag}</Text>
-              <Text color={"gray.500"}>Email : {email}</Text>
-              <Text color={"gray.500"}>Phone Number : {phoneNumber}</Text>
+              <Flex alignItems={"center"}>
+                <Icon mr={2} as={MdPermIdentity} boxSize={4} />
+                <Text fontWeight={600}>{name}</Text>
+              </Flex>
+              <Flex alignItems={"center"}>
+                <Icon mr={2} as={AiFillInstagram} boxSize={4} />
+                <Text color={"gray.500"}>{tag}</Text>
+              </Flex>
+              <Flex alignItems={"center"}>
+                <Icon mr={2} as={MdEmail} boxSize={4} />
+                <Text color={"gray.500"}>{email}</Text>
+              </Flex>
+              <Flex alignItems={"center"}>
+                <Icon mr={2} as={FaPhone} boxSize={4} />
+                <Text color={"gray.500"}>{phoneNumber}</Text>
+              </Flex>
             </Stack>
           </Stack>
           <Stack>
-            <Button
-              backgroundColor={"red.400"}
-              size={"sm"}
-              color={"white"}
-              onClick={() => deleteContact(id)}
-            >
-              <IoPersonRemove />
-            </Button>
+            <DeleteButton id={id} />
           </Stack>
         </Flex>
       </Box>
