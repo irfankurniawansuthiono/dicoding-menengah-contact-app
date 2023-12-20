@@ -12,10 +12,15 @@ import {
 import { deleteContact } from "../../api/api";
 import { useRef } from "react";
 import { IoPersonRemove } from "react-icons/io5";
+import { fetchContacts } from "../../fetchContact/fetchContact";
 function DeleteButton({ id }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-
+  const deleteHandler = async (id) => {
+    await deleteContact(id);
+    fetchContacts();
+    onClose();
+  };
   return (
     <>
       <Button colorScheme="red" onClick={onOpen} size={"sm"}>
@@ -43,7 +48,7 @@ function DeleteButton({ id }) {
               </Button>
               <Button
                 colorScheme="red"
-                onClick={() => deleteContact(id)}
+                onClick={() => deleteHandler(id)}
                 ml={3}
               >
                 Delete

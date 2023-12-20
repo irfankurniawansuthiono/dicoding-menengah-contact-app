@@ -24,6 +24,7 @@ import { addContact as add } from "../../api/api";
 import { IoAddOutline } from "react-icons/io5";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { fetchContacts } from "../../fetchContact/fetchContact";
 export default function AddContact() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ export default function AddContact() {
               try {
                 const status = await add(newValues);
                 if (!status.error) {
-                  alert("success added the contact");
+                  fetchContacts();
                 }
                 onClose();
               } catch (error) {
